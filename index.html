@@ -2,9 +2,19 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ستوك المحل</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>ONE MOBILE - ستوك المحل</title>
+  
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ONE MOBILE">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -35,19 +45,42 @@
       margin-bottom: 16px;
     }
 
-    .header h1 { font-size: 26px; font-weight: 800; }
+    .header-title {
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .logo {
+      width: 50px; height: 50px;
+      background: linear-gradient(135deg, #3b82f6, #a855f7);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+    }
+
+    .header h1 { font-size: 22px; font-weight: 800; line-height: 1.2; }
     .header h1 span {
       background: linear-gradient(135deg, #3b82f6, #a855f7);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      display: block; font-size: 14px;
     }
 
-    .refresh-btn {
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      border: none; color: white; padding: 11px 20px;
-      border-radius: 14px; cursor: pointer;
-      font-family: "Cairo"; font-weight: 700; font-size: 14px;
+    .header-buttons {
+      display: flex; gap: 8px; flex-wrap: wrap;
     }
+
+    .btn {
+      border: none; color: white; padding: 11px 18px;
+      border-radius: 12px; cursor: pointer;
+      font-family: "Cairo"; font-weight: 700; font-size: 13px;
+      display: flex; align-items: center; gap: 6px;
+      transition: 0.3s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+    .btn-success { background: linear-gradient(135deg, #10b981, #059669); }
+    .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
 
     .last-update { color: #94a3b8; font-size: 13px; margin-bottom: 14px; }
 
@@ -61,6 +94,32 @@
     }
     .search-box input:focus { border-color: #3b82f6; }
     .search-box input::placeholder { color: #94a3b8; }
+
+    /* PRICE FILTER */
+    .price-filter {
+      display: flex; gap: 10px; align-items: center;
+      margin-bottom: 14px; flex-wrap: wrap;
+      background: rgba(255,255,255,0.04);
+      padding: 12px; border-radius: 14px;
+    }
+    .price-filter label {
+      color: #cbd5e1; font-size: 13px; font-weight: 600;
+    }
+    .price-filter input {
+      width: 130px; padding: 8px 12px;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.08);
+      color: white; font-family: "Cairo"; font-size: 14px;
+    }
+    .price-filter input:focus { outline: none; border-color: #3b82f6; }
+
+    .clear-filter-btn {
+      background: rgba(239,68,68,0.2);
+      color: #f87171; border: 1px solid rgba(239,68,68,0.3);
+      padding: 8px 14px; border-radius: 10px;
+      cursor: pointer; font-family: "Cairo"; font-size: 13px;
+      font-weight: 700;
+    }
 
     /* TABS */
     .tabs { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -95,12 +154,42 @@
       border-radius: 18px; padding: 16px; text-align: center;
     }
     .stat-card .icon { font-size: 24px; margin-bottom: 6px; }
-    .stat-card h3 { color: #94a3b8; font-size: 13px; margin-bottom: 4px; }
-    .stat-card .value { font-size: 26px; font-weight: 800; }
+    .stat-card h3 { color: #94a3b8; font-size: 12px; margin-bottom: 4px; }
+    .stat-card .value { font-size: 22px; font-weight: 800; }
     .stat-card.total .value { color: #60a5fa; }
     .stat-card.up .value { color: #4ade80; }
     .stat-card.down .value { color: #fbbf24; }
     .stat-card.types .value { color: #a78bfa; }
+    .stat-card.value-card .value { color: #34d399; font-size: 18px; }
+
+    /* CATEGORY VALUES */
+    .category-values {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px; padding: 16px;
+      margin-bottom: 16px;
+    }
+    .category-values h3 {
+      font-size: 14px; color: #94a3b8;
+      margin-bottom: 12px; font-weight: 600;
+    }
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .category-value-item {
+      background: rgba(255,255,255,0.05);
+      padding: 12px; border-radius: 12px;
+      display: flex; justify-content: space-between;
+      align-items: center;
+    }
+    .category-value-item .name {
+      font-size: 13px; color: #cbd5e1; font-weight: 600;
+    }
+    .category-value-item .amount {
+      color: #34d399; font-weight: 800; font-size: 14px;
+    }
 
     /* PRODUCTS */
     .products-grid {
@@ -156,9 +245,27 @@
       border: 1px solid rgba(239,68,68,0.3);
     }
 
+    .price-tag {
+      background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.15));
+      border: 1px solid rgba(16,185,129,0.3);
+      color: #34d399;
+      padding: 10px 14px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 17px;
+      margin: 12px 0;
+    }
+
+    .price-tag.no-price {
+      background: rgba(148,163,184,0.1);
+      border-color: rgba(148,163,184,0.2);
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
     .shops {
       display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-      margin-top: 12px;
     }
 
     .shop {
@@ -200,9 +307,62 @@
     @media (max-width: 768px) {
       body { padding: 10px; }
       .header { padding: 18px; }
-      .header h1 { font-size: 20px; }
+      .header h1 { font-size: 18px; }
       .products-grid { grid-template-columns: 1fr; }
       .stats { grid-template-columns: repeat(2, 1fr); }
+      .price-filter input { width: 110px; }
+    }
+
+    /* ===== PRINT STYLES ===== */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        padding: 10px;
+      }
+      .header-buttons, .search-box, .tabs, .price-filter,
+      .refresh-btn, .retry-btn, .last-update {
+        display: none !important;
+      }
+      .header, .stat-card, .product-card, .category-values {
+        background: white !important;
+        border: 1px solid #ddd !important;
+        color: black !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+      .product-name, .stat-card h3, .header h1 {
+        color: black !important;
+      }
+      .product-category {
+        background: #eee !important;
+        color: #333 !important;
+      }
+      .total-badge {
+        background: #333 !important;
+        color: white !important;
+      }
+      .price-tag {
+        background: #f0f9ff !important;
+        color: #065f46 !important;
+        border-color: #10b981 !important;
+      }
+      .shop {
+        background: #f9f9f9 !important;
+        border-color: #ddd !important;
+      }
+      .shop-label, .shop-value { color: black !important; }
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px;
+      }
+      .stats {
+        grid-template-columns: repeat(4, 1fr) !important;
+      }
+      .stat-card .value { color: black !important; }
+      .category-value-item { background: #f5f5f5 !important; }
+      .category-value-item .name { color: black !important; }
+      .category-value-item .amount { color: #047857 !important; }
     }
   </style>
 </head>
@@ -213,13 +373,31 @@
     <!-- HEADER -->
     <div class="header">
       <div class="header-top">
-        <h1>📦 <span>ستوك المحل</span></h1>
-        <button class="refresh-btn" onclick="loadData()">🔄 تحديث</button>
+        <div class="header-title">
+          <div class="logo">📱</div>
+          <h1>
+            ONE MOBILE
+            <span>ستوك المحل</span>
+          </h1>
+        </div>
+        <div class="header-buttons">
+          <button class="btn btn-primary" onclick="loadData()">🔄 تحديث</button>
+          <button class="btn btn-success" onclick="window.print()">🖨️ طباعة</button>
+          <button class="btn btn-warning" onclick="downloadPDF()">📄 PDF</button>
+        </div>
       </div>
       <div class="last-update" id="lastUpdate">جاري التحميل...</div>
 
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="🔍   ابحث عن منتج..." />
+      </div>
+
+      <div class="price-filter">
+        <label>💰 السعر من:</label>
+        <input type="number" id="minPrice" placeholder="0" />
+        <label>إلى:</label>
+        <input type="number" id="maxPrice" placeholder="∞" />
+        <button class="clear-filter-btn" onclick="clearPriceFilter()">✖️ مسح</button>
       </div>
 
       <div class="tabs">
@@ -263,6 +441,17 @@
         <h3>عدد الموديلات</h3>
         <div class="value" id="typesQty">0</div>
       </div>
+      <div class="stat-card value-card">
+        <div class="icon">💰</div>
+        <h3>قيمة الستوك الكلية</h3>
+        <div class="value" id="totalValue">0</div>
+      </div>
+    </div>
+
+    <!-- CATEGORY VALUES -->
+    <div class="category-values">
+      <h3>💎 قيمة كل قسم</h3>
+      <div class="category-grid" id="categoryValues"></div>
     </div>
 
     <!-- PRODUCTS -->
@@ -275,6 +464,10 @@
 
   </div>
 
+  <!-- PDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
+
   <script>
     // ============================================
     //   ضع رابط Google Apps Script هنا
@@ -284,15 +477,11 @@
     let allProducts = [];
     let currentFilter = "all";
 
-    // ===== تحديد القسم تلقائيًا =====
     function detectCategory(name) {
       const n = name.toLowerCase();
-      
       if (n.includes("iphone")) return "iphone";
       if (n.includes("ipad")) return "ipad";
       if (n.includes("macbook")) return "macbook";
-      
-      // كل اللي مش من دول يبقى accessories
       return "accessories";
     }
 
@@ -310,12 +499,15 @@
       return "إكسسوارات";
     }
 
-    // ===== تنظيف اسم المنتج من النجوم =====
     function cleanName(name) {
       return name.replace(/\*/g, "").replace(/\s+/g, " ").trim();
     }
 
-    // ===== تحميل البيانات =====
+    function formatPrice(price) {
+      if (!price || price === 0) return "غير محدد";
+      return parseInt(price).toLocaleString("en-US") + " ج";
+    }
+
     async function loadData() {
       const grid = document.getElementById("productsGrid");
       grid.innerHTML = `
@@ -335,7 +527,8 @@
           category: detectCategory(item.name),
           shopUp: item.shopUp,
           shopDown: item.shopDown,
-          total: item.total
+          total: item.total,
+          price: item.price || 0
         }));
 
         const now = new Date();
@@ -344,6 +537,7 @@
           " - " + now.toLocaleDateString("ar-EG");
 
         updateStats();
+        updateCategoryValues();
         updateTabCounts();
         renderProducts();
 
@@ -359,19 +553,43 @@
       }
     }
 
-    // ===== الإحصائيات =====
     function updateStats() {
       const totalUp = allProducts.reduce((sum, p) => sum + p.shopUp, 0);
       const totalDown = allProducts.reduce((sum, p) => sum + p.shopDown, 0);
       const totalAll = allProducts.reduce((sum, p) => sum + p.total, 0);
+      const totalValue = allProducts.reduce((sum, p) => sum + (p.total * p.price), 0);
 
       document.getElementById("totalQty").textContent = totalAll;
       document.getElementById("upQty").textContent = totalUp;
       document.getElementById("downQty").textContent = totalDown;
       document.getElementById("typesQty").textContent = allProducts.length;
+      document.getElementById("totalValue").textContent = 
+        totalValue.toLocaleString("en-US") + " ج";
     }
 
-    // ===== عدد كل قسم =====
+    function updateCategoryValues() {
+      const categories = ["iphone", "ipad", "macbook", "accessories"];
+      const container = document.getElementById("categoryValues");
+      container.innerHTML = "";
+
+      categories.forEach(cat => {
+        const items = allProducts.filter(p => p.category === cat);
+        const value = items.reduce((sum, p) => sum + (p.total * p.price), 0);
+        const qty = items.reduce((sum, p) => sum + p.total, 0);
+
+        const div = document.createElement("div");
+        div.className = "category-value-item";
+        div.innerHTML = `
+          <div>
+            <div class="name">${getCategoryIcon(cat)} ${getCategoryText(cat)}</div>
+            <div style="color: #64748b; font-size: 11px; margin-top: 2px;">${qty} قطعة</div>
+          </div>
+          <div class="amount">${value.toLocaleString("en-US")} ج</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
     function updateTabCounts() {
       document.getElementById("count-all").textContent = allProducts.length;
       document.getElementById("count-iphone").textContent =
@@ -384,10 +602,11 @@
         allProducts.filter(p => p.category === "accessories").length;
     }
 
-    // ===== عرض المنتجات =====
     function renderProducts() {
       const grid = document.getElementById("productsGrid");
       const searchValue = document.getElementById("searchInput").value.toLowerCase();
+      const minPrice = parseInt(document.getElementById("minPrice").value) || 0;
+      const maxPrice = parseInt(document.getElementById("maxPrice").value) || Infinity;
 
       let filtered = allProducts.filter(product => {
         const matchCategory =
@@ -397,10 +616,12 @@
           product.name.toLowerCase().includes(searchValue) ||
           product.rawName.toLowerCase().includes(searchValue);
 
-        return matchCategory && matchSearch;
+        const matchPrice = 
+          product.price >= minPrice && product.price <= maxPrice;
+
+        return matchCategory && matchSearch && matchPrice;
       });
 
-      // ترتيب: المتاح الأول، الخلصان الأخير
       filtered.sort((a, b) => b.total - a.total);
 
       if (filtered.length === 0) {
@@ -408,7 +629,7 @@
           <div class="empty-state">
             <div class="icon">🔍</div>
             <h3>مفيش نتائج</h3>
-            <p>جرب تبحث بكلمة تانية</p>
+            <p>جرب تبحث بكلمة تانية أو غيّر فلتر السعر</p>
           </div>
         `;
         return;
@@ -421,6 +642,8 @@
         card.className = "product-card";
         if (product.total === 0) card.classList.add("out-stock");
 
+        const priceClass = product.price > 0 ? "" : "no-price";
+
         card.innerHTML = `
           <div class="product-header">
             <div style="flex: 1;">
@@ -432,6 +655,10 @@
             <div class="total-badge ${product.total === 0 ? 'zero' : ''}">
               ${product.total}
             </div>
+          </div>
+
+          <div class="price-tag ${priceClass}">
+            💰 ${formatPrice(product.price)}
           </div>
 
           <div class="shops">
@@ -454,6 +681,71 @@
       });
     }
 
+    function clearPriceFilter() {
+      document.getElementById("minPrice").value = "";
+      document.getElementById("maxPrice").value = "";
+      renderProducts();
+    }
+
+    // ===== PDF =====
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-GB") + " " + 
+                      now.toLocaleTimeString("en-GB", {hour: '2-digit', minute:'2-digit'});
+
+      // Header
+      doc.setFontSize(18);
+      doc.setTextColor(59, 130, 246);
+      doc.text("ONE MOBILE - Stock Report", 14, 18);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text("Date: " + dateStr, 14, 25);
+
+      // Stats
+      const totalAll = allProducts.reduce((sum, p) => sum + p.total, 0);
+      const totalValue = allProducts.reduce((sum, p) => sum + (p.total * p.price), 0);
+      
+      doc.setFontSize(11);
+      doc.setTextColor(0);
+      doc.text(`Total Items: ${totalAll}`, 14, 33);
+      doc.text(`Total Models: ${allProducts.length}`, 70, 33);
+      doc.text(`Total Value: ${totalValue.toLocaleString("en-US")} EGP`, 130, 33);
+
+      // Table
+      const rows = allProducts.map(p => [
+        p.name,
+        getCategoryText(p.category),
+        p.shopUp,
+        p.shopDown,
+        p.total,
+        p.price > 0 ? p.price.toLocaleString("en-US") : "-",
+        p.price > 0 ? (p.price * p.total).toLocaleString("en-US") : "-"
+      ]);
+
+      doc.autoTable({
+        startY: 38,
+        head: [['Product', 'Category', 'Up', 'Down', 'Total', 'Price', 'Value']],
+        body: rows,
+        styles: { fontSize: 8, cellPadding: 2 },
+        headStyles: { fillColor: [59, 130, 246] },
+        columnStyles: {
+          0: { cellWidth: 70 },
+          1: { cellWidth: 25 },
+          2: { cellWidth: 12, halign: 'center' },
+          3: { cellWidth: 12, halign: 'center' },
+          4: { cellWidth: 14, halign: 'center' },
+          5: { cellWidth: 22, halign: 'right' },
+          6: { cellWidth: 25, halign: 'right' }
+        }
+      });
+
+      doc.save(`OneMobile_Stock_${now.toISOString().split('T')[0]}.pdf`);
+    }
+
     // ===== Events =====
     document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -465,12 +757,20 @@
     });
 
     document.getElementById("searchInput").addEventListener("input", renderProducts);
+    document.getElementById("minPrice").addEventListener("input", renderProducts);
+    document.getElementById("maxPrice").addEventListener("input", renderProducts);
 
-    // ===== بدء التحميل =====
     loadData();
-
-    // تحديث تلقائي كل 3 دقائق
     setInterval(loadData, 3 * 60 * 1000);
+
+    // ===== PWA Service Worker =====
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('SW registered'))
+          .catch(err => console.log('SW failed'));
+      });
+    }
   </script>
 </body>
 </html>
