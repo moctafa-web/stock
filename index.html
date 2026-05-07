@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ستوك المحل</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Cairo", Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #111827 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container { max-width: 1400px; margin: auto; }
+
+    /* HEADER */
+    .header {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .header-top {
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .header h1 { font-size: 26px; font-weight: 800; }
+    .header h1 span {
+      background: linear-gradient(135deg, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .refresh-btn {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border: none; color: white; padding: 11px 20px;
+      border-radius: 14px; cursor: pointer;
+      font-family: "Cairo"; font-weight: 700; font-size: 14px;
+    }
+
+    .last-update { color: #94a3b8; font-size: 13px; margin-bottom: 14px; }
+
+    /* SEARCH */
+    .search-box { position: relative; margin-bottom: 14px; }
+    .search-box input {
+      width: 100%; padding: 14px 18px;
+      border-radius: 14px; border: 2px solid rgba(255,255,255,0.1);
+      outline: none; background: rgba(255,255,255,0.08);
+      color: white; font-size: 15px; font-family: "Cairo";
+    }
+    .search-box input:focus { border-color: #3b82f6; }
+    .search-box input::placeholder { color: #94a3b8; }
+
+    /* TABS */
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tab-btn {
+      border: 2px solid rgba(255,255,255,0.1);
+      cursor: pointer; padding: 10px 16px;
+      border-radius: 14px; background: rgba(255,255,255,0.06);
+      color: #cbd5e1; transition: 0.3s;
+      font-weight: 700; font-size: 14px; font-family: "Cairo";
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tab-btn:hover { background: rgba(255,255,255,0.12); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-color: transparent; color: white;
+      box-shadow: 0 8px 20px rgba(59,130,246,0.3);
+    }
+    .tab-count {
+      background: rgba(255,255,255,0.2); padding: 2px 10px;
+      border-radius: 20px; font-size: 12px; font-weight: 800;
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px; margin-bottom: 16px;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px; padding: 16px; text-align: center;
+    }
+    .stat-card .icon { font-size: 24px; margin-bottom: 6px; }
+    .stat-card h3 { color: #94a3b8; font-size: 13px; margin-bottom: 4px; }
+    .stat-card .value { font-size: 26px; font-weight: 800; }
+    .stat-card.total .value { color: #60a5fa; }
+    .stat-card.up .value { color: #4ade80; }
+    .stat-card.down .value { color: #fbbf24; }
+    .stat-card.types .value { color: #a78bfa; }
+
+    /* PRODUCTS */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 14px;
+    }
+
+    .product-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+      transition: 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .product-card.out-stock { opacity: 0.6; }
+
+    .product-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 10px; margin-bottom: 14px;
+    }
+
+    .product-name {
+      font-size: 15px; font-weight: 700;
+      line-height: 1.6; color: #f1f5f9;
+    }
+
+    .product-category {
+      color: #93c5fd; font-size: 12px;
+      font-weight: 600; margin-top: 6px;
+      display: inline-block;
+      background: rgba(59,130,246,0.15);
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    .total-badge {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white; padding: 8px 14px;
+      border-radius: 12px; font-weight: 800;
+      font-size: 18px; min-width: 50px; text-align: center;
+      flex-shrink: 0;
+    }
+
+    .total-badge.zero {
+      background: rgba(239,68,68,0.2);
+      color: #f87171;
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+
+    .shops {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      margin-top: 12px;
+    }
+
+    .shop {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 12px; text-align: center;
+    }
+
+    .shop-label { color: #94a3b8; font-size: 12px; margin-bottom: 4px; font-weight: 600; }
+    .shop-value { font-size: 22px; font-weight: 800; }
+    .shop-value.has { color: #4ade80; }
+    .shop-value.empty { color: #64748b; }
+
+    /* LOADING & EMPTY */
+    .loading, .empty-state, .error-state {
+      grid-column: 1/-1; text-align: center; padding: 50px 20px;
+    }
+    .spinner {
+      width: 50px; height: 50px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state .icon, .error-state .icon { font-size: 50px; margin-bottom: 10px; }
+    .empty-state h3 { color: #94a3b8; }
+    .error-state h3 { color: #f87171; margin-bottom: 6px; }
+    .error-state p { color: #94a3b8; font-size: 14px; margin-bottom: 16px; }
+
+    .retry-btn {
+      background: #ef4444; border: none; color: white;
+      padding: 12px 24px; border-radius: 12px;
+      cursor: pointer; font-family: "Cairo"; font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      .header { padding: 18px; }
+      .header h1 { font-size: 20px; }
+      .products-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-top">
+        <h1>📦 <span>ستوك المحل</span></h1>
+        <button class="refresh-btn" onclick="loadData()">🔄 تحديث</button>
+      </div>
+      <div class="last-update" id="lastUpdate">جاري التحميل...</div>
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍   ابحث عن منتج..." />
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-filter="all">
+          الكل <span class="tab-count" id="count-all">0</span>
+        </button>
+        <button class="tab-btn" data-filter="iphone">
+          📱 iPhone <span class="tab-count" id="count-iphone">0</span>
+        </button>
+        <button class="tab-btn" data-filter="ipad">
+          📋 iPad <span class="tab-count" id="count-ipad">0</span>
+        </button>
+        <button class="tab-btn" data-filter="macbook">
+          💻 MacBook <span class="tab-count" id="count-macbook">0</span>
+        </button>
+        <button class="tab-btn" data-filter="accessories">
+          🎧 إكسسوارات <span class="tab-count" id="count-accessories">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card total">
+        <div class="icon">📦</div>
+        <h3>إجمالي القطع</h3>
+        <div class="value" id="totalQty">0</div>
+      </div>
+      <div class="stat-card up">
+        <div class="icon">⬆️</div>
+        <h3>المحل اللي فوق</h3>
+        <div class="value" id="upQty">0</div>
+      </div>
+      <div class="stat-card down">
+        <div class="icon">⬇️</div>
+        <h3>المحل اللي تحت</h3>
+        <div class="value" id="downQty">0</div>
+      </div>
+      <div class="stat-card types">
+        <div class="icon">🏷️</div>
+        <h3>عدد الموديلات</h3>
+        <div class="value" id="typesQty">0</div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div id="productsGrid" class="products-grid">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>جاري تحميل الستوك...</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ============================================
+    //   ضع رابط Google Apps Script هنا
+    // ============================================
+    const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwqrE5U8e1QOYfaeH9IWAaoh7jPHFAHxF_qD2i8vyQwnfhvrg2CaHHvNHXOsZ8r2IIo/exec";
+
+    let allProducts = [];
+    let currentFilter = "all";
+
+    // ===== تحديد القسم تلقائيًا =====
+    function detectCategory(name) {
+      const n = name.toLowerCase();
+      
+      if (n.includes("iphone")) return "iphone";
+      if (n.includes("ipad")) return "ipad";
+      if (n.includes("macbook")) return "macbook";
+      
+      // كل اللي مش من دول يبقى accessories
+      return "accessories";
+    }
+
+    function getCategoryIcon(cat) {
+      if (cat === "iphone") return "📱";
+      if (cat === "ipad") return "📋";
+      if (cat === "macbook") return "💻";
+      return "🎧";
+    }
+
+    function getCategoryText(cat) {
+      if (cat === "iphone") return "iPhone";
+      if (cat === "ipad") return "iPad";
+      if (cat === "macbook") return "MacBook";
+      return "إكسسوارات";
+    }
+
+    // ===== تنظيف اسم المنتج من النجوم =====
+    function cleanName(name) {
+      return name.replace(/\*/g, "").replace(/\s+/g, " ").trim();
+    }
+
+    // ===== تحميل البيانات =====
+    async function loadData() {
+      const grid = document.getElementById("productsGrid");
+      grid.innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>جاري تحميل الستوك...</p>
+        </div>
+      `;
+
+      try {
+        const response = await fetch(SHEET_API_URL);
+        const data = await response.json();
+
+        allProducts = data.map(item => ({
+          name: cleanName(item.name),
+          rawName: item.name,
+          category: detectCategory(item.name),
+          shopUp: item.shopUp,
+          shopDown: item.shopDown,
+          total: item.total
+        }));
+
+        const now = new Date();
+        document.getElementById("lastUpdate").textContent =
+          "آخر تحديث: " + now.toLocaleTimeString("ar-EG", {hour: '2-digit', minute:'2-digit'}) +
+          " - " + now.toLocaleDateString("ar-EG");
+
+        updateStats();
+        updateTabCounts();
+        renderProducts();
+
+      } catch (error) {
+        grid.innerHTML = `
+          <div class="error-state">
+            <div class="icon">😵</div>
+            <h3>حصل مشكلة في تحميل البيانات</h3>
+            <p>تأكد من اتصال الإنترنت ومن رابط الشيت</p>
+            <button class="retry-btn" onclick="loadData()">🔄 حاول تاني</button>
+          </div>
+        `;
+      }
+    }
+
+    // ===== الإحصائيات =====
+    function updateStats() {
+      const totalUp = allProducts.reduce((sum, p) => sum + p.shopUp, 0);
+      const totalDown = allProducts.reduce((sum, p) => sum + p.shopDown, 0);
+      const totalAll = allProducts.reduce((sum, p) => sum + p.total, 0);
+
+      document.getElementById("totalQty").textContent = totalAll;
+      document.getElementById("upQty").textContent = totalUp;
+      document.getElementById("downQty").textContent = totalDown;
+      document.getElementById("typesQty").textContent = allProducts.length;
+    }
+
+    // ===== عدد كل قسم =====
+    function updateTabCounts() {
+      document.getElementById("count-all").textContent = allProducts.length;
+      document.getElementById("count-iphone").textContent =
+        allProducts.filter(p => p.category === "iphone").length;
+      document.getElementById("count-ipad").textContent =
+        allProducts.filter(p => p.category === "ipad").length;
+      document.getElementById("count-macbook").textContent =
+        allProducts.filter(p => p.category === "macbook").length;
+      document.getElementById("count-accessories").textContent =
+        allProducts.filter(p => p.category === "accessories").length;
+    }
+
+    // ===== عرض المنتجات =====
+    function renderProducts() {
+      const grid = document.getElementById("productsGrid");
+      const searchValue = document.getElementById("searchInput").value.toLowerCase();
+
+      let filtered = allProducts.filter(product => {
+        const matchCategory =
+          currentFilter === "all" || product.category === currentFilter;
+
+        const matchSearch =
+          product.name.toLowerCase().includes(searchValue) ||
+          product.rawName.toLowerCase().includes(searchValue);
+
+        return matchCategory && matchSearch;
+      });
+
+      // ترتيب: المتاح الأول، الخلصان الأخير
+      filtered.sort((a, b) => b.total - a.total);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🔍</div>
+            <h3>مفيش نتائج</h3>
+            <p>جرب تبحث بكلمة تانية</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = "";
+
+      filtered.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        if (product.total === 0) card.classList.add("out-stock");
+
+        card.innerHTML = `
+          <div class="product-header">
+            <div style="flex: 1;">
+              <div class="product-name">${product.name}</div>
+              <div class="product-category">
+                ${getCategoryIcon(product.category)} ${getCategoryText(product.category)}
+              </div>
+            </div>
+            <div class="total-badge ${product.total === 0 ? 'zero' : ''}">
+              ${product.total}
+            </div>
+          </div>
+
+          <div class="shops">
+            <div class="shop">
+              <div class="shop-label">⬆️ المحل اللي فوق</div>
+              <div class="shop-value ${product.shopUp > 0 ? 'has' : 'empty'}">
+                ${product.shopUp}
+              </div>
+            </div>
+            <div class="shop">
+              <div class="shop-label">⬇️ المحل اللي تحت</div>
+              <div class="shop-value ${product.shopDown > 0 ? 'has' : 'empty'}">
+                ${product.shopDown}
+              </div>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    // ===== Events =====
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.filter;
+        renderProducts();
+      });
+    });
+
+    document.getElementById("searchInput").addEventListener("input", renderProducts);
+
+    // ===== بدء التحميل =====
+    loadData();
+
+    // تحديث تلقائي كل 3 دقائق
+    setInterval(loadData, 3 * 60 * 1000);
+  </script>
+</body>
+</html>
