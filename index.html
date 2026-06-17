@@ -77,6 +77,7 @@
       transition: 0.3s;
     }
     .btn:hover { transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.6; cursor: wait; }
 
     .btn-primary { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
     .btn-success { background: linear-gradient(135deg, #10b981, #059669); }
@@ -95,23 +96,38 @@
     .search-box input:focus { border-color: #3b82f6; }
     .search-box input::placeholder { color: #94a3b8; }
 
-    /* PRICE FILTER */
-    .price-filter {
-      display: flex; gap: 10px; align-items: center;
-      margin-bottom: 14px; flex-wrap: wrap;
-      background: rgba(255,255,255,0.04);
-      padding: 12px; border-radius: 14px;
+    /* CONTROLS BAR */
+    .controls-bar {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 14px;
     }
-    .price-filter label {
+
+    .control-group {
+      display: flex; gap: 8px; align-items: center;
+      background: rgba(255,255,255,0.04);
+      padding: 10px 12px; border-radius: 14px;
+      flex-wrap: wrap;
+    }
+
+    .control-group label {
       color: #cbd5e1; font-size: 13px; font-weight: 600;
     }
-    .price-filter input {
-      width: 130px; padding: 8px 12px;
+
+    .control-group input,
+    .control-group select {
+      padding: 8px 12px;
       border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
       background: rgba(255,255,255,0.08);
       color: white; font-family: "Cairo"; font-size: 14px;
+      outline: none;
     }
-    .price-filter input:focus { outline: none; border-color: #3b82f6; }
+
+    .control-group input { width: 110px; }
+    .control-group select { cursor: pointer; min-width: 150px; }
+    .control-group select option { background: #1e293b; color: white; }
+
+    .control-group input:focus,
+    .control-group select:focus { border-color: #3b82f6; }
 
     .clear-filter-btn {
       background: rgba(239,68,68,0.2);
@@ -121,8 +137,34 @@
       font-weight: 700;
     }
 
+    /* VIEW TOGGLE */
+    .view-toggle {
+      display: flex; gap: 4px;
+      background: rgba(255,255,255,0.04);
+      padding: 6px; border-radius: 14px;
+    }
+
+    .view-btn {
+      background: transparent; border: none;
+      color: #94a3b8; cursor: pointer;
+      padding: 8px 14px; border-radius: 10px;
+      font-family: "Cairo"; font-weight: 700; font-size: 13px;
+      transition: 0.3s;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .view-btn:hover { color: white; }
+
+    .view-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+    }
+
     /* TABS */
     .tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tab-wrapper { position: relative; }
+
     .tab-btn {
       border: 2px solid rgba(255,255,255,0.1);
       cursor: pointer; padding: 10px 16px;
@@ -137,9 +179,71 @@
       border-color: transparent; color: white;
       box-shadow: 0 8px 20px rgba(59,130,246,0.3);
     }
+    .tab-btn.has-dropdown::after {
+      content: "▾"; font-size: 12px; margin-right: 2px;
+    }
     .tab-count {
       background: rgba(255,255,255,0.2); padding: 2px 10px;
       border-radius: 20px; font-size: 12px; font-weight: 800;
+    }
+
+    /* DROPDOWN MENU */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: rgba(30, 41, 59, 0.98);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 8px;
+      min-width: 200px;
+      z-index: 100;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      animation: dropDown 0.2s ease;
+    }
+
+    @keyframes dropDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-wrapper.open .dropdown-menu { display: block; }
+
+    .dropdown-item {
+      display: flex; justify-content: space-between;
+      align-items: center;
+      padding: 9px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #cbd5e1;
+      font-size: 13px;
+      font-weight: 600;
+      transition: 0.2s;
+      font-family: "Cairo";
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: right;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(255,255,255,0.08);
+      color: white;
+    }
+
+    .dropdown-item.active {
+      background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(139,92,246,0.3));
+      color: white;
+    }
+
+    .dropdown-item .item-count {
+      background: rgba(255,255,255,0.15);
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
     }
 
     /* STATS */
@@ -191,7 +295,16 @@
       color: #34d399; font-weight: 800; font-size: 14px;
     }
 
-    /* PRODUCTS */
+    /* RESULTS COUNT */
+    .results-info {
+      color: #94a3b8;
+      font-size: 13px;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+    .results-info strong { color: #60a5fa; }
+
+    /* GRID VIEW */
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -279,6 +392,189 @@
     .shop-value.has { color: #4ade80; }
     .shop-value.empty { color: #64748b; }
 
+    /* LIST VIEW */
+    .products-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .product-row {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      align-items: center;
+      gap: 16px;
+      transition: 0.2s ease;
+    }
+
+    .product-row:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.15);
+      transform: translateX(-3px);
+    }
+
+    .product-row.out-stock { opacity: 0.55; }
+
+    .row-info { min-width: 0; }
+
+    .row-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .row-category {
+      color: #93c5fd;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-block;
+      background: rgba(59,130,246,0.15);
+      padding: 2px 9px;
+      border-radius: 20px;
+    }
+
+    .row-quantities {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+
+    .row-quantities .q-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .row-quantities .q-label {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    .row-quantities .q-up { color: #4ade80; }
+    .row-quantities .q-down { color: #fbbf24; }
+    .row-quantities .q-total { color: #60a5fa; font-size: 15px; }
+    .row-quantities .q-zero { color: #64748b; }
+
+    .row-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .row-price {
+      background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.15));
+      border: 1px solid rgba(16,185,129,0.3);
+      color: #34d399;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 14px;
+      white-space: nowrap;
+      min-width: 110px;
+      text-align: center;
+    }
+
+    .row-price.no-price {
+      background: rgba(148,163,184,0.1);
+      border-color: rgba(148,163,184,0.2);
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    .row-total-badge {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 16px;
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .row-total-badge.zero {
+      background: rgba(239,68,68,0.2);
+      color: #f87171;
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+
+    /* COMPACT VIEW */
+    .products-compact {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .compact-header,
+    .compact-row {
+      display: grid;
+      grid-template-columns: 1fr 100px 70px 70px 70px 120px;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
+    .compact-header {
+      background: rgba(59,130,246,0.15);
+      color: #93c5fd;
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .compact-row {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      color: #e2e8f0;
+      transition: 0.2s;
+    }
+
+    .compact-row:hover { background: rgba(255,255,255,0.04); }
+    .compact-row.out-stock { opacity: 0.5; }
+
+    .compact-name {
+      font-weight: 700;
+      color: #f1f5f9;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .compact-cat {
+      color: #93c5fd;
+      font-size: 11px;
+      background: rgba(59,130,246,0.15);
+      padding: 3px 8px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .compact-up { color: #4ade80; font-weight: 800; text-align: center; }
+    .compact-down { color: #fbbf24; font-weight: 800; text-align: center; }
+    .compact-total {
+      color: #60a5fa;
+      font-weight: 800;
+      text-align: center;
+      font-size: 15px;
+    }
+    .compact-total.zero { color: #f87171; }
+    .compact-price {
+      color: #34d399;
+      font-weight: 800;
+      text-align: center;
+      font-size: 13px;
+    }
+    .compact-price.no-price { color: #64748b; font-size: 11px; }
+
     /* LOADING & EMPTY */
     .loading, .empty-state, .error-state {
       grid-column: 1/-1; text-align: center; padding: 50px 20px;
@@ -304,61 +600,368 @@
       cursor: pointer; font-family: "Cairo"; font-weight: 700;
     }
 
+/* ============================ */
+/* PDF EXPORT CONTAINER         */
+/* ============================ */
+#pdfExportContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 794px;
+  background: white;
+  font-family: "Cairo", Arial, sans-serif;
+  direction: rtl;
+  visibility: hidden;
+  z-index: -1;
+}
+
+#pdfExportContainer.show {
+  visibility: visible;
+  z-index: 99998;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+    .pdf-page {
+      padding: 30px;
+      background: white;
+      color: #1e293b;
+    }
+
+    .pdf-header {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 25px 30px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pdf-header-title h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: white;
+    }
+
+    .pdf-header-title p {
+      font-size: 14px;
+      opacity: 0.95;
+      color: white;
+    }
+
+    .pdf-header-logo {
+      width: 70px;
+      height: 70px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+
+    .pdf-date {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 18px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .pdf-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .pdf-stat {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .pdf-stat-icon {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .pdf-stat-label {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .pdf-stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+
+    .pdf-stat.blue { border-color: #3b82f6; background: #eff6ff; }
+    .pdf-stat.blue .pdf-stat-value { color: #1d4ed8; }
+    .pdf-stat.green { border-color: #10b981; background: #ecfdf5; }
+    .pdf-stat.green .pdf-stat-value { color: #047857; }
+    .pdf-stat.orange { border-color: #f59e0b; background: #fffbeb; }
+    .pdf-stat.orange .pdf-stat-value { color: #b45309; }
+    .pdf-stat.purple { border-color: #8b5cf6; background: #f5f3ff; }
+    .pdf-stat.purple .pdf-stat-value { color: #6d28d9; }
+
+    .pdf-total-value {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 18px;
+      border-radius: 14px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .pdf-total-value-label {
+      font-size: 13px;
+      opacity: 0.95;
+      margin-bottom: 4px;
+    }
+
+    .pdf-total-value-amount {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .pdf-section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1e293b;
+      margin: 18px 0 10px;
+      padding: 8px 14px;
+      background: #eff6ff;
+      border-right: 4px solid #3b82f6;
+      border-radius: 8px;
+    }
+
+    .pdf-categories-summary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pdf-cat-summary {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pdf-cat-name {
+      font-weight: 700;
+      color: #1e293b;
+      font-size: 13px;
+    }
+
+    .pdf-cat-qty {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .pdf-cat-value {
+      font-weight: 800;
+      color: #047857;
+      font-size: 13px;
+    }
+
+    .pdf-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 11px;
+    }
+
+    .pdf-table thead {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .pdf-table th {
+      padding: 10px 6px;
+      font-weight: 800;
+      text-align: center;
+      font-size: 11px;
+      color: white;
+    }
+
+    .pdf-table td {
+      padding: 8px 6px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: center;
+      color: #1e293b;
+      font-size: 11px;
+    }
+
+    .pdf-table tbody tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .pdf-name-col {
+      text-align: right !important;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .pdf-cat-badge {
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .pdf-qty-total {
+      color: #1d4ed8;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .pdf-qty-up { color: #047857; font-weight: 800; }
+    .pdf-qty-down { color: #b45309; font-weight: 800; }
+    .pdf-qty-zero { color: #94a3b8; }
+
+    .pdf-price-cell {
+      color: #047857;
+      font-weight: 800;
+    }
+
+    .pdf-price-cell.no-price {
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 10px;
+    }
+
+    .pdf-value-cell {
+      color: #6d28d9;
+      font-weight: 800;
+    }
+
+    .pdf-footer {
+      margin-top: 20px;
+      padding: 14px;
+      background: #f8fafc;
+      border-radius: 10px;
+      text-align: center;
+      color: #64748b;
+      font-size: 11px;
+      border-top: 3px solid #3b82f6;
+    }
+
+    .pdf-footer strong { color: #1e293b; }
+
+    /* PDF Loading Overlay */
+    .pdf-loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .pdf-loading-overlay.show { display: flex; }
+
+    .pdf-loading-overlay .pdf-spinner {
+      width: 60px; height: 60px;
+      border: 5px solid rgba(255,255,255,0.2);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .pdf-loading-overlay p {
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
     @media (max-width: 768px) {
       body { padding: 10px; }
       .header { padding: 18px; }
       .header h1 { font-size: 18px; }
       .products-grid { grid-template-columns: 1fr; }
       .stats { grid-template-columns: repeat(2, 1fr); }
-      .price-filter input { width: 110px; }
+      .control-group input { width: 95px; }
+
+      .product-row {
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+      .row-quantities {
+        grid-column: 1 / -1;
+        justify-content: space-between;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
+      .row-price {
+        grid-column: 1 / -1;
+        min-width: 0;
+      }
+
+      .compact-header { display: none; }
+      .compact-row {
+        grid-template-columns: 1fr auto;
+        gap: 6px;
+        padding: 12px;
+      }
+      .compact-name { grid-column: 1 / -1; }
+      .compact-cat { justify-self: start; }
+      .compact-up::before { content: "⬆ "; color: #94a3b8; }
+      .compact-down::before { content: "⬇ "; color: #94a3b8; }
+      .compact-total::before { content: "= "; color: #94a3b8; }
     }
 
-    /* ===== PRINT STYLES ===== */
     @media print {
-      body {
-        background: white !important;
-        color: black !important;
-        padding: 10px;
-      }
-      .header-buttons, .search-box, .tabs, .price-filter,
-      .refresh-btn, .retry-btn, .last-update {
+      body { background: white !important; color: black !important; padding: 10px; }
+      .header-buttons, .search-box, .tabs, .controls-bar,
+      .refresh-btn, .retry-btn, .last-update, .results-info,
+      #pdfExportContainer, .pdf-loading-overlay {
         display: none !important;
       }
-      .header, .stat-card, .product-card, .category-values {
+      .header, .stat-card, .product-card, .product-row,
+      .category-values, .products-compact {
         background: white !important;
         border: 1px solid #ddd !important;
         color: black !important;
         box-shadow: none !important;
         page-break-inside: avoid;
       }
-      .product-name, .stat-card h3, .header h1 {
-        color: black !important;
+      .product-name, .row-name, .compact-name,
+      .stat-card h3, .header h1 { color: black !important; }
+      .product-category, .row-category, .compact-cat {
+        background: #eee !important; color: #333 !important;
       }
-      .product-category {
-        background: #eee !important;
-        color: #333 !important;
+      .total-badge, .row-total-badge {
+        background: #333 !important; color: white !important;
       }
-      .total-badge {
-        background: #333 !important;
-        color: white !important;
-      }
-      .price-tag {
-        background: #f0f9ff !important;
-        color: #065f46 !important;
+      .price-tag, .row-price, .compact-price {
+        background: #f0f9ff !important; color: #065f46 !important;
         border-color: #10b981 !important;
       }
-      .shop {
-        background: #f9f9f9 !important;
-        border-color: #ddd !important;
-      }
+      .shop { background: #f9f9f9 !important; border-color: #ddd !important; }
       .shop-label, .shop-value { color: black !important; }
-      .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px;
-      }
-      .stats {
-        grid-template-columns: repeat(4, 1fr) !important;
-      }
+      .products-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
+      .stats { grid-template-columns: repeat(4, 1fr) !important; }
       .stat-card .value { color: black !important; }
       .category-value-item { background: #f5f5f5 !important; }
       .category-value-item .name { color: black !important; }
@@ -383,7 +986,7 @@
         <div class="header-buttons">
           <button class="btn btn-primary" onclick="loadData()">🔄 تحديث</button>
           <button class="btn btn-success" onclick="window.print()">🖨️ طباعة</button>
-          <button class="btn btn-warning" onclick="downloadPDF()">📄 PDF</button>
+          <button class="btn btn-warning" id="pdfBtn" onclick="downloadPDF()">📄 PDF</button>
         </div>
       </div>
       <div class="last-update" id="lastUpdate">جاري التحميل...</div>
@@ -392,30 +995,137 @@
         <input type="text" id="searchInput" placeholder="🔍   ابحث عن منتج..." />
       </div>
 
-      <div class="price-filter">
-        <label>💰 السعر من:</label>
-        <input type="number" id="minPrice" placeholder="0" />
-        <label>إلى:</label>
-        <input type="number" id="maxPrice" placeholder="∞" />
-        <button class="clear-filter-btn" onclick="clearPriceFilter()">✖️ مسح</button>
+      <div class="controls-bar">
+        <div class="control-group">
+          <label>💰 السعر من:</label>
+          <input type="number" id="minPrice" placeholder="0" />
+          <label>إلى:</label>
+          <input type="number" id="maxPrice" placeholder="∞" />
+          <button class="clear-filter-btn" onclick="clearPriceFilter()">✖️ مسح</button>
+        </div>
+
+        <div class="control-group">
+          <label>🔃 ترتيب:</label>
+          <select id="sortSelect">
+            <option value="qty-desc">الأكثر كمية</option>
+            <option value="price-desc">الأغلى سعراً</option>
+            <option value="price-asc">الأرخص سعراً</option>
+            <option value="name-asc">أبجدي (أ-ي / A-Z)</option>
+            <option value="size-asc">المقاس (Size in inch)</option>
+          </select>
+        </div>
+
+        <div class="view-toggle">
+          <button class="view-btn" data-view="grid" title="عرض كروت">🔲 كروت</button>
+          <button class="view-btn active" data-view="list" title="عرض قائمة">📋 قائمة</button>
+          <button class="view-btn" data-view="compact" title="عرض مختصر">📊 مختصر</button>
+        </div>
       </div>
 
-      <div class="tabs">
-        <button class="tab-btn active" data-filter="all">
-          الكل <span class="tab-count" id="count-all">0</span>
-        </button>
-        <button class="tab-btn" data-filter="iphone">
-          📱 iPhone <span class="tab-count" id="count-iphone">0</span>
-        </button>
-        <button class="tab-btn" data-filter="ipad">
-          📋 iPad <span class="tab-count" id="count-ipad">0</span>
-        </button>
-        <button class="tab-btn" data-filter="macbook">
-          💻 MacBook <span class="tab-count" id="count-macbook">0</span>
-        </button>
-        <button class="tab-btn" data-filter="accessories">
-          🎧 إكسسوارات <span class="tab-count" id="count-accessories">0</span>
-        </button>
+      <div class="tabs" id="tabsContainer">
+        <div class="tab-wrapper">
+          <button class="tab-btn active" data-filter="all">
+            الكل <span class="tab-count" id="count-all">0</span>
+          </button>
+        </div>
+
+        <div class="tab-wrapper">
+          <button class="tab-btn" data-filter="iphone">
+            📱 iPhone <span class="tab-count" id="count-iphone">0</span>
+          </button>
+        </div>
+
+        <div class="tab-wrapper" id="wrapper-ipad">
+          <button class="tab-btn has-dropdown" data-filter="ipad" data-dropdown="ipad">
+            📋 iPad <span class="tab-count" id="count-ipad">0</span>
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item active" data-filter="ipad" data-sub="all">
+              <span>📋 كل iPad</span>
+              <span class="item-count" id="sub-ipad-all">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="ipad" data-sub="pro">
+              <span>📋 iPad Pro</span>
+              <span class="item-count" id="sub-ipad-pro">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="ipad" data-sub="air">
+              <span>📋 iPad Air</span>
+              <span class="item-count" id="sub-ipad-air">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="tab-wrapper" id="wrapper-macbook">
+          <button class="tab-btn has-dropdown" data-filter="macbook" data-dropdown="macbook">
+            💻 MacBook <span class="tab-count" id="count-macbook">0</span>
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item active" data-filter="macbook" data-sub="all">
+              <span>💻 كل MacBook</span>
+              <span class="item-count" id="sub-mac-all">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="macbook" data-sub="pro">
+              <span>💻 MacBook Pro</span>
+              <span class="item-count" id="sub-mac-pro">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="macbook" data-sub="air">
+              <span>💻 MacBook Air</span>
+              <span class="item-count" id="sub-mac-air">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="macbook" data-sub="neo">
+              <span>💻 MacBook NEO</span>
+              <span class="item-count" id="sub-mac-neo">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="tab-wrapper" id="wrapper-accessories">
+          <button class="tab-btn has-dropdown" data-filter="accessories" data-dropdown="accessories">
+            🎧 إكسسوارات <span class="tab-count" id="count-accessories">0</span>
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item active" data-filter="accessories" data-sub="all">
+              <span>🎧 كل الإكسسوارات</span>
+              <span class="item-count" id="sub-acc-all">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="accessories" data-sub="dji">
+              <span>🚁 DJI</span>
+              <span class="item-count" id="sub-acc-dji">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="accessories" data-sub="rayban">
+              <span>🕶️ Ray-Ban</span>
+              <span class="item-count" id="sub-acc-rayban">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="accessories" data-sub="pencil">
+              <span>✏️ Pencil</span>
+              <span class="item-count" id="sub-acc-pencil">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="accessories" data-sub="watch">
+              <span>⌚ Watch</span>
+              <span class="item-count" id="sub-acc-watch">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="accessories" data-sub="airpods">
+              <span>🎧 AirPods</span>
+              <span class="item-count" id="sub-acc-airpods">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="accessories" data-sub="insta360">
+              <span>📸 Insta360</span>
+              <span class="item-count" id="sub-acc-insta360">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="accessories" data-sub="keyboard">
+              <span>⌨️ Magic Keyboard</span>
+              <span class="item-count" id="sub-acc-keyboard">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="accessories" data-sub="samsung">
+              <span>📱 Samsung</span>
+              <span class="item-count" id="sub-acc-samsung">0</span>
+            </button>
+            <button class="dropdown-item" data-filter="accessories" data-sub="others">
+              <span>📦 Others</span>
+              <span class="item-count" id="sub-acc-others">0</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -448,14 +1158,14 @@
       </div>
     </div>
 
-    <!-- CATEGORY VALUES -->
     <div class="category-values">
       <h3>💎 قيمة كل قسم</h3>
       <div class="category-grid" id="categoryValues"></div>
     </div>
 
-    <!-- PRODUCTS -->
-    <div id="productsGrid" class="products-grid">
+    <div class="results-info" id="resultsInfo"></div>
+
+    <div id="productsContainer">
       <div class="loading">
         <div class="spinner"></div>
         <p>جاري تحميل الستوك...</p>
@@ -464,18 +1174,28 @@
 
   </div>
 
-  <!-- PDF Library -->
+  <!-- PDF Loading Overlay -->
+  <div class="pdf-loading-overlay" id="pdfLoadingOverlay">
+    <div class="pdf-spinner"></div>
+    <p>⏳ جاري إنشاء ملف PDF...</p>
+    <p style="font-size:13px; opacity:0.8;">قد تستغرق العملية بضع ثواني</p>
+  </div>
+
+  <!-- Hidden PDF Container -->
+  <div id="pdfExportContainer"></div>
+
+  <!-- html2pdf Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
 
   <script>
-    // ============================================
-    //   ضع رابط Google Apps Script هنا
-    // ============================================
     const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwqrE5U8e1QOYfaeH9IWAaoh7jPHFAHxF_qD2i8vyQwnfhvrg2CaHHvNHXOsZ8r2IIo/exec";
 
     let allProducts = [];
     let currentFilter = "all";
+    let currentSubFilter = "all";
+    let currentView = localStorage.getItem("stockView") || "list";
+    let currentSort = localStorage.getItem("stockSort") || "qty-desc";
 
     function detectCategory(name) {
       const n = name.toLowerCase();
@@ -483,6 +1203,44 @@
       if (n.includes("ipad")) return "ipad";
       if (n.includes("macbook")) return "macbook";
       return "accessories";
+    }
+
+    function detectSubCategory(name, mainCat) {
+      const n = name.toLowerCase();
+      if (mainCat === "ipad") {
+        if (n.includes("pro")) return "pro";
+        if (n.includes("air")) return "air";
+        return "other";
+      }
+      if (mainCat === "macbook") {
+        if (n.includes("neo")) return "neo";
+        if (n.includes("pro")) return "pro";
+        if (n.includes("air")) return "air";
+        return "other";
+      }
+      if (mainCat === "accessories") {
+        if (n.includes("dji")) return "dji";
+        if (n.includes("ray-ban") || n.includes("rayban") || n.includes("ray ban")) return "rayban";
+        if (n.includes("pencil")) return "pencil";
+        if (n.includes("watch")) return "watch";
+        if (n.includes("airpod") || n.includes("air pod")) return "airpods";
+        if (n.includes("insta360") || n.includes("insta 360")) return "insta360";
+        if (n.includes("magic keyboard") || n.includes("keyboard")) return "keyboard";
+        if (n.includes("samsung")) return "samsung";
+        return "others";
+      }
+      return "all";
+    }
+
+    function extractSize(name) {
+      const match = name.match(/(\d+(\.\d+)?)\s*(in|inch|"|″)/i);
+      if (match) return parseFloat(match[1]);
+      const m2 = name.match(/\b(\d{2}(\.\d)?)\b/);
+      if (m2) {
+        const num = parseFloat(m2[1]);
+        if (num >= 11 && num <= 17) return num;
+      }
+      return 0;
     }
 
     function getCategoryIcon(cat) {
@@ -496,7 +1254,7 @@
       if (cat === "iphone") return "iPhone";
       if (cat === "ipad") return "iPad";
       if (cat === "macbook") return "MacBook";
-      return "إكسسوارات";
+      return "accessories";
     }
 
     function cleanName(name) {
@@ -509,8 +1267,8 @@
     }
 
     async function loadData() {
-      const grid = document.getElementById("productsGrid");
-      grid.innerHTML = `
+      const container = document.getElementById("productsContainer");
+      container.innerHTML = `
         <div class="loading">
           <div class="spinner"></div>
           <p>جاري تحميل الستوك...</p>
@@ -521,15 +1279,21 @@
         const response = await fetch(SHEET_API_URL);
         const data = await response.json();
 
-        allProducts = data.map(item => ({
-          name: cleanName(item.name),
-          rawName: item.name,
-          category: detectCategory(item.name),
-          shopUp: item.shopUp,
-          shopDown: item.shopDown,
-          total: item.total,
-          price: item.price || 0
-        }));
+        allProducts = data.map(item => {
+          const cleaned = cleanName(item.name);
+          const mainCat = detectCategory(item.name);
+          return {
+            name: cleaned,
+            rawName: item.name,
+            category: mainCat,
+            subCategory: detectSubCategory(item.name, mainCat),
+            size: extractSize(item.name),
+            shopUp: item.shopUp,
+            shopDown: item.shopDown,
+            total: item.total,
+            price: item.price || 0
+          };
+        });
 
         const now = new Date();
         document.getElementById("lastUpdate").textContent =
@@ -539,10 +1303,11 @@
         updateStats();
         updateCategoryValues();
         updateTabCounts();
+        updateSubCounts();
         renderProducts();
 
       } catch (error) {
-        grid.innerHTML = `
+        container.innerHTML = `
           <div class="error-state">
             <div class="icon">😵</div>
             <h3>حصل مشكلة في تحميل البيانات</h3>
@@ -602,48 +1367,110 @@
         allProducts.filter(p => p.category === "accessories").length;
     }
 
+    function updateSubCounts() {
+      const ipads = allProducts.filter(p => p.category === "ipad");
+      document.getElementById("sub-ipad-all").textContent = ipads.length;
+      document.getElementById("sub-ipad-pro").textContent = ipads.filter(p => p.subCategory === "pro").length;
+      document.getElementById("sub-ipad-air").textContent = ipads.filter(p => p.subCategory === "air").length;
+
+      const macs = allProducts.filter(p => p.category === "macbook");
+      document.getElementById("sub-mac-all").textContent = macs.length;
+      document.getElementById("sub-mac-pro").textContent = macs.filter(p => p.subCategory === "pro").length;
+      document.getElementById("sub-mac-air").textContent = macs.filter(p => p.subCategory === "air").length;
+      document.getElementById("sub-mac-neo").textContent = macs.filter(p => p.subCategory === "neo").length;
+
+      const accs = allProducts.filter(p => p.category === "accessories");
+      document.getElementById("sub-acc-all").textContent = accs.length;
+      document.getElementById("sub-acc-dji").textContent = accs.filter(p => p.subCategory === "dji").length;
+      document.getElementById("sub-acc-rayban").textContent = accs.filter(p => p.subCategory === "rayban").length;
+      document.getElementById("sub-acc-pencil").textContent = accs.filter(p => p.subCategory === "pencil").length;
+      document.getElementById("sub-acc-watch").textContent = accs.filter(p => p.subCategory === "watch").length;
+      document.getElementById("sub-acc-airpods").textContent = accs.filter(p => p.subCategory === "airpods").length;
+      document.getElementById("sub-acc-insta360").textContent = accs.filter(p => p.subCategory === "insta360").length;
+      document.getElementById("sub-acc-keyboard").textContent = accs.filter(p => p.subCategory === "keyboard").length;
+      document.getElementById("sub-acc-samsung").textContent = accs.filter(p => p.subCategory === "samsung").length;
+      document.getElementById("sub-acc-others").textContent = accs.filter(p => p.subCategory === "others").length;
+    }
+
+    function sortProducts(arr) {
+      const sorted = [...arr];
+      switch (currentSort) {
+        case "qty-desc":
+          sorted.sort((a, b) => b.total - a.total);
+          break;
+        case "price-desc":
+          sorted.sort((a, b) => b.price - a.price);
+          break;
+        case "price-asc":
+          sorted.sort((a, b) => {
+            if (a.price === 0) return 1;
+            if (b.price === 0) return -1;
+            return a.price - b.price;
+          });
+          break;
+        case "name-asc":
+          sorted.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+          break;
+        case "size-asc":
+          sorted.sort((a, b) => a.size - b.size);
+          break;
+      }
+      return sorted;
+    }
+
     function renderProducts() {
-      const grid = document.getElementById("productsGrid");
-      const searchValue = document.getElementById("searchInput").value.toLowerCase();
+      const container = document.getElementById("productsContainer");
+      const searchValue = document.getElementById("searchInput").value.toLowerCase().trim();
       const minPrice = parseInt(document.getElementById("minPrice").value) || 0;
       const maxPrice = parseInt(document.getElementById("maxPrice").value) || Infinity;
 
       let filtered = allProducts.filter(product => {
         const matchCategory =
           currentFilter === "all" || product.category === currentFilter;
-
+        let matchSub = true;
+        if (currentSubFilter !== "all" && currentFilter !== "all") {
+          matchSub = product.subCategory === currentSubFilter;
+        }
         const matchSearch =
           product.name.toLowerCase().includes(searchValue) ||
           product.rawName.toLowerCase().includes(searchValue);
-
         const matchPrice = 
           product.price >= minPrice && product.price <= maxPrice;
-
-        return matchCategory && matchSearch && matchPrice;
+        return matchCategory && matchSub && matchSearch && matchPrice;
       });
 
-      filtered.sort((a, b) => b.total - a.total);
+      filtered = sortProducts(filtered);
+
+      const totalQty = filtered.reduce((s, p) => s + p.total, 0);
+      const totalVal = filtered.reduce((s, p) => s + (p.price * p.total), 0);
+      document.getElementById("resultsInfo").innerHTML = filtered.length > 0
+        ? `📊 <strong>${filtered.length}</strong> موديل • <strong>${totalQty}</strong> قطعة • قيمة: <strong>${totalVal.toLocaleString("en-US")} ج</strong>`
+        : "";
 
       if (filtered.length === 0) {
-        grid.innerHTML = `
+        container.innerHTML = `
           <div class="empty-state">
             <div class="icon">🔍</div>
             <h3>مفيش نتائج</h3>
-            <p>جرب تبحث بكلمة تانية أو غيّر فلتر السعر</p>
+            <p>جرب تبحث بكلمة تانية أو غيّر الفلتر</p>
           </div>
         `;
         return;
       }
 
-      grid.innerHTML = "";
+      if (currentView === "grid") renderGridView(container, filtered);
+      else if (currentView === "list") renderListView(container, filtered);
+      else if (currentView === "compact") renderCompactView(container, filtered);
+    }
 
-      filtered.forEach(product => {
+    function renderGridView(container, products) {
+      container.className = "products-grid";
+      container.innerHTML = "";
+      products.forEach(product => {
         const card = document.createElement("div");
         card.className = "product-card";
         if (product.total === 0) card.classList.add("out-stock");
-
         const priceClass = product.price > 0 ? "" : "no-price";
-
         card.innerHTML = `
           <div class="product-header">
             <div style="flex: 1;">
@@ -656,11 +1483,9 @@
               ${product.total}
             </div>
           </div>
-
           <div class="price-tag ${priceClass}">
             💰 ${formatPrice(product.price)}
           </div>
-
           <div class="shops">
             <div class="shop">
               <div class="shop-label">⬆️ المحل اللي فوق</div>
@@ -676,9 +1501,80 @@
             </div>
           </div>
         `;
-
-        grid.appendChild(card);
+        container.appendChild(card);
       });
+    }
+
+    function renderListView(container, products) {
+      container.className = "products-list";
+      container.innerHTML = "";
+      products.forEach(product => {
+        const row = document.createElement("div");
+        row.className = "product-row";
+        if (product.total === 0) row.classList.add("out-stock");
+        const priceClass = product.price > 0 ? "" : "no-price";
+        row.innerHTML = `
+          <div class="row-info">
+            <div class="row-name">${product.name}</div>
+            <div class="row-category">
+              ${getCategoryIcon(product.category)} ${getCategoryText(product.category)}
+            </div>
+          </div>
+          <div class="row-quantities">
+            <div class="q-item">
+              <span class="q-label">⬆️ فوق:</span>
+              <span class="${product.shopUp > 0 ? 'q-up' : 'q-zero'}">${product.shopUp}</span>
+            </div>
+            <div class="row-divider"></div>
+            <div class="q-item">
+              <span class="q-label">⬇️ تحت:</span>
+              <span class="${product.shopDown > 0 ? 'q-down' : 'q-zero'}">${product.shopDown}</span>
+            </div>
+            <div class="row-divider"></div>
+            <div class="q-item">
+              <span class="q-label">الإجمالي:</span>
+              <span class="${product.total > 0 ? 'q-total' : 'q-zero'}">${product.total}</span>
+            </div>
+          </div>
+          <div class="row-price ${priceClass}">
+            💰 ${formatPrice(product.price)}
+          </div>
+          <div class="row-total-badge ${product.total === 0 ? 'zero' : ''}">
+            ${product.total}
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function renderCompactView(container, products) {
+      container.className = "products-compact";
+      let html = `
+        <div class="compact-header">
+          <div>المنتج</div>
+          <div style="text-align:center;">القسم</div>
+          <div style="text-align:center;">⬆️ فوق</div>
+          <div style="text-align:center;">⬇️ تحت</div>
+          <div style="text-align:center;">الإجمالي</div>
+          <div style="text-align:center;">السعر</div>
+        </div>
+      `;
+      products.forEach(product => {
+        const outClass = product.total === 0 ? "out-stock" : "";
+        const totalZero = product.total === 0 ? "zero" : "";
+        const priceClass = product.price > 0 ? "" : "no-price";
+        html += `
+          <div class="compact-row ${outClass}">
+            <div class="compact-name">${product.name}</div>
+            <div class="compact-cat">${getCategoryIcon(product.category)} ${getCategoryText(product.category)}</div>
+            <div class="compact-up">${product.shopUp}</div>
+            <div class="compact-down">${product.shopDown}</div>
+            <div class="compact-total ${totalZero}">${product.total}</div>
+            <div class="compact-price ${priceClass}">${formatPrice(product.price)}</div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
     }
 
     function clearPriceFilter() {
@@ -687,73 +1583,348 @@
       renderProducts();
     }
 
-    // ===== PDF =====
-    function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+// ============================================
+//   PDF EXPORT - Professional Design
+// ============================================
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p', 'mm', 'a4');
 
-      const now = new Date();
-      const dateStr = now.toLocaleDateString("en-GB") + " " + 
-                      now.toLocaleTimeString("en-GB", {hour: '2-digit', minute:'2-digit'});
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
 
-      // Header
-      doc.setFontSize(18);
-      doc.setTextColor(59, 130, 246);
-      doc.text("ONE MOBILE - Stock Report", 14, 18);
-      
-      doc.setFontSize(10);
-      doc.setTextColor(100);
-      doc.text("Date: " + dateStr, 14, 25);
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("en-GB");
+  const timeStr = now.toLocaleTimeString("en-GB", {hour: '2-digit', minute:'2-digit'});
 
-      // Stats
-      const totalAll = allProducts.reduce((sum, p) => sum + p.total, 0);
-      const totalValue = allProducts.reduce((sum, p) => sum + (p.total * p.price), 0);
-      
-      doc.setFontSize(11);
-      doc.setTextColor(0);
-      doc.text(`Total Items: ${totalAll}`, 14, 33);
-      doc.text(`Total Models: ${allProducts.length}`, 70, 33);
-      doc.text(`Total Value: ${totalValue.toLocaleString("en-US")} EGP`, 130, 33);
+  // ============ Calculate Stats ============
+  const totalAll = allProducts.reduce((sum, p) => sum + p.total, 0);
+  const totalUp = allProducts.reduce((sum, p) => sum + p.shopUp, 0);
+  const totalDown = allProducts.reduce((sum, p) => sum + p.shopDown, 0);
+  const totalValue = allProducts.reduce((sum, p) => sum + (p.total * p.price), 0);
 
-      // Table
-      const rows = allProducts.map(p => [
-        p.name,
-        getCategoryText(p.category),
-        p.shopUp,
-        p.shopDown,
-        p.total,
-        p.price > 0 ? p.price.toLocaleString("en-US") : "-",
-        p.price > 0 ? (p.price * p.total).toLocaleString("en-US") : "-"
-      ]);
+  // ============ HEADER (Blue/Purple Gradient Effect) ============
+  // Main header background
+  doc.setFillColor(59, 130, 246); // Blue
+  doc.rect(0, 0, pageWidth, 32, 'F');
+  
+  // Purple accent strip
+  doc.setFillColor(139, 92, 246);
+  doc.rect(0, 28, pageWidth, 4, 'F');
 
-      doc.autoTable({
-        startY: 38,
-        head: [['Product', 'Category', 'Up', 'Down', 'Total', 'Price', 'Value']],
-        body: rows,
-        styles: { fontSize: 8, cellPadding: 2 },
-        headStyles: { fillColor: [59, 130, 246] },
-        columnStyles: {
-          0: { cellWidth: 70 },
-          1: { cellWidth: 25 },
-          2: { cellWidth: 12, halign: 'center' },
-          3: { cellWidth: 12, halign: 'center' },
-          4: { cellWidth: 14, halign: 'center' },
-          5: { cellWidth: 22, halign: 'right' },
-          6: { cellWidth: 25, halign: 'right' }
+  // Logo box (white)
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(pageWidth - 28, 6, 20, 20, 3, 3, 'F');
+  doc.setFontSize(16);
+  doc.setTextColor(59, 130, 246);
+  doc.text("M", pageWidth - 21, 19);
+
+  // Title
+  doc.setFontSize(22);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont(undefined, 'bold');
+  doc.text("ONE MOBILE", 14, 16);
+  
+  doc.setFontSize(11);
+  doc.setFont(undefined, 'normal');
+  doc.text("Stock Inventory Report", 14, 23);
+
+  // ============ Date Bar ============
+  doc.setFillColor(248, 250, 252);
+  doc.rect(0, 32, pageWidth, 9, 'F');
+  doc.setFontSize(9);
+  doc.setTextColor(100, 116, 139);
+  doc.text(`Generated: ${dateStr} at ${timeStr}`, 14, 38);
+  doc.setFont(undefined, 'bold');
+  doc.setTextColor(59, 130, 246);
+  doc.text(`Report ID: #${Date.now().toString().slice(-6)}`, pageWidth - 14, 38, { align: 'right' });
+
+  // ============ STATS CARDS ============
+  let yPos = 48;
+  const cardWidth = (pageWidth - 28 - 9) / 4;  // 4 cards with gaps
+  const cardHeight = 22;
+  
+  const statsData = [
+    { label: 'TOTAL ITEMS', value: totalAll.toString(), color: [59, 130, 246], bg: [239, 246, 255] },
+    { label: 'UPSTAIRS', value: totalUp.toString(), color: [16, 185, 129], bg: [236, 253, 245] },
+    { label: 'DOWNSTAIRS', value: totalDown.toString(), color: [245, 158, 11], bg: [255, 251, 235] },
+    { label: 'MODELS', value: allProducts.length.toString(), color: [139, 92, 246], bg: [245, 243, 255] }
+  ];
+
+  statsData.forEach((stat, i) => {
+    const x = 14 + (i * (cardWidth + 3));
+    
+    // Background
+    doc.setFillColor(...stat.bg);
+    doc.roundedRect(x, yPos, cardWidth, cardHeight, 2, 2, 'F');
+    
+    // Top border accent
+    doc.setFillColor(...stat.color);
+    doc.roundedRect(x, yPos, cardWidth, 2, 1, 1, 'F');
+    
+    // Label
+    doc.setFontSize(7);
+    doc.setTextColor(100, 116, 139);
+    doc.setFont(undefined, 'bold');
+    doc.text(stat.label, x + cardWidth/2, yPos + 8, { align: 'center' });
+    
+    // Value
+    doc.setFontSize(16);
+    doc.setTextColor(...stat.color);
+    doc.text(stat.value, x + cardWidth/2, yPos + 17, { align: 'center' });
+  });
+
+  // ============ TOTAL VALUE BANNER ============
+  yPos += cardHeight + 5;
+  doc.setFillColor(16, 185, 129);
+  doc.roundedRect(14, yPos, pageWidth - 28, 14, 2, 2, 'F');
+  
+  doc.setFontSize(9);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont(undefined, 'normal');
+  doc.text("TOTAL STOCK VALUE", 20, yPos + 6);
+  
+  doc.setFontSize(16);
+  doc.setFont(undefined, 'bold');
+  doc.text(`${totalValue.toLocaleString("en-US")} EGP`, pageWidth - 20, yPos + 9, { align: 'right' });
+
+  // ============ CATEGORIES SUMMARY ============
+  yPos += 19;
+  
+  // Section title
+  doc.setFillColor(239, 246, 255);
+  doc.rect(14, yPos, pageWidth - 28, 7, 'F');
+  doc.setFillColor(59, 130, 246);
+  doc.rect(14, yPos, 2, 7, 'F');
+  doc.setFontSize(10);
+  doc.setTextColor(30, 41, 59);
+  doc.setFont(undefined, 'bold');
+  doc.text("Categories Summary", 19, yPos + 5);
+
+  yPos += 10;
+  
+  const categories = ["iphone", "ipad", "macbook", "accessories"];
+  const catWidth = (pageWidth - 28 - 6) / 4;
+  
+  categories.forEach((cat, i) => {
+    const items = allProducts.filter(p => p.category === cat);
+    const value = items.reduce((sum, p) => sum + (p.total * p.price), 0);
+    const qty = items.reduce((sum, p) => sum + p.total, 0);
+    const x = 14 + (i * (catWidth + 2));
+    
+    // Card
+    doc.setFillColor(248, 250, 252);
+    doc.roundedRect(x, yPos, catWidth, 18, 2, 2, 'F');
+    doc.setDrawColor(226, 232, 240);
+    doc.roundedRect(x, yPos, catWidth, 18, 2, 2, 'S');
+    
+    // Category name
+    doc.setFontSize(9);
+    doc.setTextColor(30, 41, 59);
+    doc.setFont(undefined, 'bold');
+    doc.text(getCategoryText(cat), x + catWidth/2, yPos + 6, { align: 'center' });
+    
+    // Qty
+    doc.setFontSize(7);
+    doc.setTextColor(100, 116, 139);
+    doc.setFont(undefined, 'normal');
+    doc.text(`${items.length} models / ${qty} pcs`, x + catWidth/2, yPos + 10, { align: 'center' });
+    
+    // Value
+    doc.setFontSize(9);
+    doc.setTextColor(4, 120, 87);
+    doc.setFont(undefined, 'bold');
+    doc.text(`${value.toLocaleString("en-US")} EGP`, x + catWidth/2, yPos + 15, { align: 'center' });
+  });
+
+  // ============ PRODUCTS TABLE ============
+  yPos += 23;
+  
+  // Section title
+  doc.setFillColor(239, 246, 255);
+  doc.rect(14, yPos, pageWidth - 28, 7, 'F');
+  doc.setFillColor(59, 130, 246);
+  doc.rect(14, yPos, 2, 7, 'F');
+  doc.setFontSize(10);
+  doc.setTextColor(30, 41, 59);
+  doc.setFont(undefined, 'bold');
+  doc.text("Products Details", 19, yPos + 5);
+
+  yPos += 9;
+
+  // Sort products by category
+  const sortedProducts = [...allProducts].sort((a, b) => {
+    if (a.category !== b.category) return a.category.localeCompare(b.category);
+    return b.total - a.total;
+  });
+
+  const rows = sortedProducts.map((p, idx) => [
+    (idx + 1).toString(),
+    p.name,
+    getCategoryText(p.category),
+    p.shopUp.toString(),
+    p.shopDown.toString(),
+    p.total.toString(),
+    p.price > 0 ? p.price.toLocaleString("en-US") : "-",
+    p.price > 0 ? (p.price * p.total).toLocaleString("en-US") : "-"
+  ]);
+
+  doc.autoTable({
+    startY: yPos,
+    head: [['#', 'Product Name', 'Category', 'Up', 'Down', 'Total', 'Price (EGP)', 'Value (EGP)']],
+    body: rows,
+    theme: 'grid',
+    styles: {
+      fontSize: 8,
+      cellPadding: 2.5,
+      lineColor: [226, 232, 240],
+      lineWidth: 0.1,
+      textColor: [30, 41, 59]
+    },
+    headStyles: {
+      fillColor: [59, 130, 246],
+      textColor: [255, 255, 255],
+      fontStyle: 'bold',
+      fontSize: 9,
+      halign: 'center',
+      cellPadding: 3
+    },
+    alternateRowStyles: {
+      fillColor: [248, 250, 252]
+    },
+    columnStyles: {
+      0: { cellWidth: 8, halign: 'center', textColor: [100, 116, 139], fontStyle: 'bold' },
+      1: { cellWidth: 65, halign: 'left', fontStyle: 'bold' },
+      2: { cellWidth: 22, halign: 'center', fontSize: 7 },
+      3: { cellWidth: 12, halign: 'center', textColor: [4, 120, 87], fontStyle: 'bold' },
+      4: { cellWidth: 12, halign: 'center', textColor: [180, 83, 9], fontStyle: 'bold' },
+      5: { cellWidth: 14, halign: 'center', textColor: [29, 78, 216], fontStyle: 'bold', fontSize: 10 },
+      6: { cellWidth: 24, halign: 'right', textColor: [4, 120, 87], fontStyle: 'bold' },
+      7: { cellWidth: 25, halign: 'right', textColor: [109, 40, 217], fontStyle: 'bold' }
+    },
+    didParseCell: function(data) {
+      // Zero quantities styling
+      if (data.column.index === 3 || data.column.index === 4) {
+        if (data.cell.raw === '0') {
+          data.cell.styles.textColor = [148, 163, 184];
+          data.cell.styles.fontStyle = 'normal';
         }
-      });
+      }
+      if (data.column.index === 5 && data.cell.raw === '0') {
+        data.cell.styles.textColor = [239, 68, 68];
+      }
+      // No price styling
+      if ((data.column.index === 6 || data.column.index === 7) && data.cell.raw === '-') {
+        data.cell.styles.textColor = [148, 163, 184];
+        data.cell.styles.fontStyle = 'normal';
+      }
+    },
+    didDrawPage: function(data) {
+      // Footer on each page
+      const pageCount = doc.internal.getNumberOfPages();
+      const currentPage = doc.internal.getCurrentPageInfo().pageNumber;
+      
+      // Footer line
+      doc.setDrawColor(59, 130, 246);
+      doc.setLineWidth(0.5);
+      doc.line(14, pageHeight - 15, pageWidth - 14, pageHeight - 15);
+      
+      // Footer text
+      doc.setFontSize(8);
+      doc.setTextColor(100, 116, 139);
+      doc.setFont(undefined, 'normal');
+      doc.text("ONE MOBILE - Stock Report", 14, pageHeight - 9);
+      doc.text(`${dateStr} ${timeStr}`, pageWidth / 2, pageHeight - 9, { align: 'center' });
+      doc.text(`Page ${currentPage} of ${pageCount}`, pageWidth - 14, pageHeight - 9, { align: 'right' });
+    },
+    margin: { top: 10, bottom: 20, left: 14, right: 14 }
+  });
 
-      doc.save(`OneMobile_Stock_${now.toISOString().split('T')[0]}.pdf`);
-    }
+  // ============ Save ============
+  doc.save(`OneMobile_Stock_${now.toISOString().split('T')[0]}.pdf`);
+}
 
-    // ===== Events =====
+    // ============================================
+    //   Events
+    // ============================================
     document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (e) => {
+        const wrapper = btn.closest(".tab-wrapper");
+        const hasDropdown = btn.classList.contains("has-dropdown");
+
+        document.querySelectorAll(".tab-wrapper").forEach(w => {
+          if (w !== wrapper) w.classList.remove("open");
+        });
+
         document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
+
         currentFilter = btn.dataset.filter;
+        currentSubFilter = "all";
+
+        if (wrapper) {
+          wrapper.querySelectorAll(".dropdown-item").forEach(it => it.classList.remove("active"));
+          const allItem = wrapper.querySelector('.dropdown-item[data-sub="all"]');
+          if (allItem) allItem.classList.add("active");
+        }
+
+        if (hasDropdown) {
+          wrapper.classList.toggle("open");
+        }
+
         renderProducts();
       });
+    });
+
+    document.querySelectorAll(".dropdown-item").forEach(item => {
+      item.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const wrapper = item.closest(".tab-wrapper");
+        const mainFilter = item.dataset.filter;
+        const subFilter = item.dataset.sub;
+
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        wrapper.querySelector(".tab-btn").classList.add("active");
+
+        wrapper.querySelectorAll(".dropdown-item").forEach(it => it.classList.remove("active"));
+        item.classList.add("active");
+
+        currentFilter = mainFilter;
+        currentSubFilter = subFilter;
+        wrapper.classList.remove("open");
+
+        renderProducts();
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".tab-wrapper")) {
+        document.querySelectorAll(".tab-wrapper").forEach(w => w.classList.remove("open"));
+      }
+    });
+
+    document.querySelectorAll(".view-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentView = btn.dataset.view;
+        localStorage.setItem("stockView", currentView);
+        renderProducts();
+      });
+    });
+
+    const savedViewBtn = document.querySelector(`.view-btn[data-view="${currentView}"]`);
+    if (savedViewBtn) {
+      document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+      savedViewBtn.classList.add("active");
+    }
+
+    const sortSelect = document.getElementById("sortSelect");
+    sortSelect.value = currentSort;
+    sortSelect.addEventListener("change", () => {
+      currentSort = sortSelect.value;
+      localStorage.setItem("stockSort", currentSort);
+      renderProducts();
     });
 
     document.getElementById("searchInput").addEventListener("input", renderProducts);
@@ -763,7 +1934,6 @@
     loadData();
     setInterval(loadData, 3 * 60 * 1000);
 
-    // ===== PWA Service Worker =====
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
